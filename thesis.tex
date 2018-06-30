@@ -1,5 +1,5 @@
 %CLASSE DOCUMENTO - LINGUA E DIMENSIONE FONT
-\documentclass[11pt,english]{toptesi}
+\documentclass[11pt,english]{./libraries/toptesi}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -15,7 +15,7 @@
 \usepackage{url}
 \usepackage{array}
 \usepackage{paralist}{\obeyspaces\global\let =\space}
-\usepackage{verbatim} 
+\usepackage{verbatim}
 \usepackage{subfig}
 \usepackage{tabularx}
 \usepackage{amsmath}
@@ -33,6 +33,7 @@
 \usepackage[babel]{csquotes}
 \usepackage{hyperref}
 \usepackage[backend=bibtex]{biblatex}
+\usepackage{tikz}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -79,17 +80,17 @@
  % change the meaning of \chapter in a group
  \begingroup\def\chapter##1{\@schapter}
  \phantomsection % for the hyperlink
- \lstlistoflistings 
+ \lstlistoflistings
  \endgroup
-} 
+}
 \makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % INFORMAZIONI PDF - PERSONALIZZARE
 \pdfinfo{%
-  /Title    (Foo Bar Baz)
-  /Author   (Tinaso de Tinasis)
+  /Title    (Control oriented modelling of four wheeled electric vehicles)
+  /Author   (Sebastian Giles)
   /Subject  (How to write meaningful titles)
   /Keywords (LaTeXi foo bar baz meaningful PIT Presicce)
 }
@@ -100,39 +101,39 @@
 % ELIMINATE LE VOCI CHE NON VI SERVONO
 
 % UNIVERSITA - NOME
-\ateneo{Presicce Institute of Technology}
+\ateneo{Università Politecnica delle Marche}
 
 % FACOLTA - DICITURA
-\FacoltaDi{Faculty of}
+\FacoltaDi{Faculty of }
 % FACOLTA - NOME
 \facolta{Engineering}
 
 % CORSO DI LAUREA - DICITURA (MANTENERE LO SPAZIO)
-\CorsoDiLaureaIn{Master of Science in }
+\CorsoDiLaureaIn{Bachelor of Science in }
 % CORSO DI LAUREA - NOME
-\corsodilaurea{Theoretic Catering}
+\corsodilaurea{Computer and Automation Engineering}
 
 % TIPOLOGIA TESI
-\TesiDiLaurea{Master Thesis}
+\TesiDiLaurea{Bachelor's Thesis}
 
 % TITOLO
-\titolo{Foo Bar Baz}
+\titolo{Control oriented modelling of four wheeled electric vehicles}
 
 % SOTTOTITOLO
-\sottotitolo{How to write meaningful titles}
+\sottotitolo{Bella raga}
 
 % RELATORE/I - DICITURA
 \AdvisorName{Advisors}
 % RELATORE - PROF. NOME E COGNOME
-\relatore{prof.\ Darth Vader}
+\relatore{prof.\ Andrea Bonci}
 % RELATORE AGGIUNTIVO - PROF NOME E COGNOME
 % SE SI HA SOLO UN RELATORE ELIMINARE E CAMBIARE Advisors in Advisor
-\secondorelatore{prof.\ Neo Cortex}
+%\secondorelatore{prof.\ Neo Cortex}
 
 % TUTORE AZIENDALE - TITOLO NOME E COGNOME
-\tutoreaziendale{Ing. Pug Dog}
+%\tutoreaziendale{Ing. Pug Dog}
 % TUTORE AZIENDALE - DICITURA//AZIENDA
-\NomeTutoreAziendale{Company tutors\\FeelGood Inc}
+%\NomeTutoreAziendale{Company tutors\\FeelGood Inc}
 
 % CANDIDATO - DICITURA (MANTENERE I DUE PUNTI)
 \CandidateName{Candidate:}
@@ -140,13 +141,13 @@
 %secondocandidato{Bombo de Bombis}
 
 % CANDIDATO - NOME E COGNOME
-\candidato{Tinaso de Tinasis}
+\candidato{Sebastian Giles}
 
 % LOGO UNIVERSITA
 \logosede{images/logo}
 
 % DATA - MESE ANNO
-\sedutadilaurea{September 1984}
+\sedutadilaurea{July 2018}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -159,7 +160,7 @@ app_a,%
 }
 
 % FILE DI BIBLIOGRAFIA
-\bibliography{bibliography} 
+\bibliography{bibliography}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
