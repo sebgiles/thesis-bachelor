@@ -1,13 +1,20 @@
 \chapter{Six degree-of-freedom vehicle model}
 \label{chap:6dof}
-
 \section{6DoF Model structure}
 \label{sec:6dofconcept}
-\subsection{Inputs and Outputs}
+The state of the car is identified by the six degrees of freedom required to define the spacial position and orientation of its chassis. The car interacts with the road through a simplified suspension system.
+The model outputs are the vertical forces on each of the four wheels, calculated as the force in each of the suspesion systems and the velocities of the respective ground contact points, which may be used to calculate friction forces by an external tyre model.
+Inputs to the model are the longitudinal and lateral forces acting on each wheel and the angle of the front wheels which is used to rotate the force vectors acting on them, in order to obtain steering control.
+The block diagram in \todo{figura} shows the intended flow of information for this model working in conjuction with a tyre model.
 \section{Chassis description}
 \label{sec:body}
-The car is modeled as a rigid body suspended over four springs.
-The rigid body represent all the mass of the vehicle including dri
+The chassis is represented by a rigid body whose mass and rotational inertia resemble those of the entire vehicle, comprehensive of the driver and the wheels, this body is assumed to be simmetrical about the longitudinal-vertical plane. This eliminates the product of inertia terms between the
+The road is assumed to be a horizontal plane, so we can define the $xyz$ inertial reference system where $z$ is pointed downwards, in the direction of the gravitational acceleration vector, $x$ and $y$ lie on the road surface and may be arbitrarily chosen as long as the right-hendedness of the reference frame is maintained.
+When the vehicle is static and in equilibrium we proceed to define the body reference system $x'y'z'$, orginated at the Center of Gravity of the chassis: $y$ is directe
+\todo{SAE J670}
+
+\todo{usare molteplici figure: 1. sistemi di riferimento e coordinate lagrangiane - 2. sospensioni su un solo asse - 3. vista 3d delle sospensioni su una sola ruota - 4. vista 3d dei soli punti di attacco}
+The rigid body represents all the mass of the vehicle including dri
 Each spring represents the suspension of one of the wheels, with one end attached to the
 The springs are constrained in the vertical orientation, but are allowed to slide with the lower end
 the rigid body represent
