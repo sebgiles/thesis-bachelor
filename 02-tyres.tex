@@ -1,0 +1,63 @@
+\chapter{Tyres}
+\label{chap:tyres}
+Tyres are the main source of external forces and moments acting upon any road vehicle\todo{cita milliken race car VD}, for this reason, understading their behaviour is key in making accurate predictions about vehicle dynamics. The tyre is a very complex system exhibiting high non linearities, especially in the wide operating range imposed by racing\todo{trova una fonte}. As a realistic model of the road-vehicle interaction is necessary for obtaining significant results from numerical simulations, the basic concepts behind tire modelling will be discussed in the present chapter.
+\section{Tyre modelling basics and definitions}
+\label{sec:tyrebasics}
+All forces acting between the vehicle and the road are distributed over the surfaces of the so called \textit{tyre contact patches}. As the tyre contact patches size and shape are dependent on the operating conditions \todo{trova fonte}, for each wheel, we consider a \textit{tyre contact point}, $C$, as the point at which an applied vector can approximate all forces acting between the tyre and the road.
+
+Various definitions for this point may be used to include more or less complicated effects due to tyre compliance, such as dynamic caster or centrifugal deformation.\todo{cita un articolo su questi effetti}
+Modelling of such phenomena is considered to be outside the scope of this research, thus, the following simple definition for the tyre contact point was deemed the most suitable. The road is assumed to be a horizontal plane and the tyre is to be considered as a circumference tangent to this plane.  The point of tangency will be considered as the tyre contact point.
+
+When analizing tyre behaviour it is ideal to define all physical quantities in a reference frame that is coherent with the wheel's own spacial position.
+
+We consider a reference system \todo{citazione + figura} with origin in $C$, whose $x$ axis lies along the intersection between the road plane and the wheel plane, such that it is generally oriented in the direction of motion, and whose $z$ axis is pointing down, perpendicular to the road plane, the $y$ axis is determined by asserting $Cxyz$ to be a right-handed cartesian coordinate system.
+
+The angle between the $xz$ plane and the tyre plane is known as the camber angle \todo{trova definizione SAE}.
+
+The $x$, $y$ and $z$ axes are respectively associated with the \textit{longitudinal}, \textit{lateral} and \textit{vertical} dimensions of the wheel.
+
+As tyre compliance is neglected in this work, the vertical force $F_z$ acting through the tyre and its contact point is considered as indipendent of tyre behaviour. This choice also excludes all transient responses of the rubber. What remain to be determined are the longitudinal and lateral friction forces, $F_x$ and $F_y$, which are what effectively make the vehicle accelerate and go around corners.
+
+Consider a wheel \todo{figura} of radius $R$ with angular velocity $\omega$ about it's spin axis, which passes through the wheel center and is orthogonal to the wheel plane.
+We consider $\omega$ as having positive sign when the upper half of the wheel is moving in the positive $x$ direction. The lowest point of the wheel is then moving with velocity $v_{w} = -\omega R$ in the wheel $x$ direction.
+Take the velocity of point $C$ in a road-fixed reference system and let $v_x$ and $v_y$ be its projections onto the wheel $x$ and $y$ axes.
+Clearly the longitudinal velocity of the road with respect to the wheel system is $v_{rx} = - v_x$.
+We then define the longitudinal slip as the velocity difference at the contact point:
+$$v_{sx} = v_{w} - v_{rx} = v_x - \omega R .$$
+
+We further define the slip ratio as
+$$ \kappa = - \frac{v_{sx}}{v_{x}} = \frac{\omega R}{v_x}-1$$
+and the slip angle $\alpha$ by
+$$\tan{\alpha} = \frac{v_y}{v_x}.$$
+
+With $F_x$ and $F_y$ being friction forces, they scale almost linearly with vertical load exerted on the tyre, for this reason it makes sense to define the longitudinal and lateral friction coefficients as
+$$ \mu_x = \frac{F_x}{F_z}$$
+and
+$$ \mu_y = \frac{F_y}{F_z}$$
+$\kappa$ and $\alpha$ are used as the primary variables when estimating $\mu_x$ and $\mu_y$. However, there are other factors that define the steady state tyre behaviour, some of which are relatively straight-forward, such as camber angle, vertical load, wheel rotational velocity, tyre pressure and temperature and others which are extremely difficult to quantify, such as asphalt characteristics, and rubber aging.
+
+The typical correlation between friction coefficients and slip ratio and slip angle is shown in
+\todo{figure dei coeff di attrito tipo dal Kiencke}
+, ideally, all curves pass through the origin, due to the fact that in absence of slip the tyre speed is the same as that of the asphalt, and no friction forces can be generated at the contact point. In reality, there is a slight offset caused by rolling resistance and asymmetric tyre contructions \todo{letto in qualcosa di pacejka}.
+
+It is also clearly noticeable that in order to obtain maximum longitudinal traction their will be an optimal amount of slip ratio, limiting the tractive torque to not exceed this value is the exact purpouse of launch control systems.
+
+Another effect of the pneumatic tyre is the so called self aligning torque, this moment is exerted about the tyre $z$ axis and is an important contributor to the steering effort which is to be made by the driver, this will be relevant to the steering dynamics introduced in the 12 DoF model presented in Chapter \ref{chap:12dof}.
+
+\section{Magic Formula tyre models}
+\label{sec:mf}
+A series of semi-empirical tyre models was developed during the past 30 years by Hans B. Pacejka of Delft University.
+
+These models are based on the same parametric mathematical expression, nicknamed \textit{Magic Formula} because of the good fitting properties it offers despite the lack of a physical foundation. The general form of these functions is
+$$ R(k) = d\sin(c\arctan(b(1-e)k+e\arctan(bk))) $$
+where $R$ is the physical quantity to be estimatated and $k$ is the most relevant variable whilst $d$, $c$, $b$, $e$ and $k$ are fitting coefficients, which may in turn depend on other variables.
+The set of equations released in 1996, called \textit{Deft Tyre 96} \todo{riferisci all'articolo 96} was the first to include combined effects of longitudinal and lateral slip, subsequent editions of the model have been conceived to model tyre pressure changes \todo{riferisci all'articolo 2004} and more.
+The version which was chosen for the simulations in this work is the PAC2002 model \todo{riferisci all'URL del pdf online}, formalized by MSC Software and released as part of their Adams CAR multibody simulation package, which includes a set of tools for obtaining the fitting coefficients from experimental datasets. The standard file format used for the storage of the tyre coefficients is text based and can also be interpreted by an appropriate MATLAB script \todo{refer to implementation paragraph}.
+The input variables to the this tyre model are the slip ratio, slip angle, vertical force and camber angle. Outputs are the longitudinal and lateral forces and the self aligning torque.
+
+\section{Tyre Data}
+\label{sec:tyredata}
+
+Experimental tyre data that is specific to Formula SAE and Formula Student tyres has been gathered by the FSAE Tyre Test Consortium \todo{link al TTC} at the Calspan test facility. The expensive tests are funded by the one-time fee the student teams pay to gain access to the information.
+As access to said data was not possible during the preparation of this work, a sample tyre model was used instead, all coefficients were given so the fitting process was not necessary.
+To verify that the tyre model was consistent with the physical intuitions developed so far, some plots were drawn (shown in \todo{figure fatte in matlab}), these both exhibit a plausible correlation between the slip quantities and the friction forces.

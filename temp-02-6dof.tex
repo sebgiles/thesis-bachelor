@@ -1,0 +1,66 @@
+\chapter{Six degree of freedom vehicle model}
+\label{chap:6dof}
+
+\section{Geometric Description}
+\label{sec:geometry}
+
+
+\thispagestyle{empty}
+
+\newcommand{\tdseteulerxyz}{
+\renewcommand{\tdplotcalctransformrotmain}{%
+%perform some trig for the Euler transformation
+\tdplotsinandcos{\sinalpha}{\cosalpha}{\tdplotalpha}
+\tdplotsinandcos{\sinbeta}{\cosbeta}{\tdplotbeta}
+\tdplotsinandcos{\singamma}{\cosgamma}{\tdplotgamma}
+%
+\tdplotmult{\sasb}{\sinalpha}{\sinbeta}
+\tdplotmult{\sasg}{\sinalpha}{\singamma}
+\tdplotmult{\sasbsg}{\sasb}{\singamma}
+%
+\tdplotmult{\sacb}{\sinalpha}{\cosbeta}
+\tdplotmult{\sacg}{\sinalpha}{\cosgamma}
+\tdplotmult{\sasbcg}{\sasb}{\cosgamma}
+%
+\tdplotmult{\casb}{\cosalpha}{\sinbeta}
+\tdplotmult{\cacb}{\cosalpha}{\cosbeta}
+\tdplotmult{\cacg}{\cosalpha}{\cosgamma}
+\tdplotmult{\casg}{\cosalpha}{\singamma}
+%
+\tdplotmult{\cbsg}{\cosbeta}{\singamma}
+\tdplotmult{\cbcg}{\cosbeta}{\cosgamma}
+%
+\tdplotmult{\casbsg}{\casb}{\singamma}
+\tdplotmult{\casbcg}{\casb}{\cosgamma}
+%
+%determine rotation matrix elements for Euler transformation
+\pgfmathsetmacro{\raaeul}{\cacb}
+\pgfmathsetmacro{\rabeul}{\casbsg - \sacg}
+\pgfmathsetmacro{\raceul}{\sasg + \casbcg}
+\pgfmathsetmacro{\rbaeul}{\sacb}
+\pgfmathsetmacro{\rbbeul}{\sasbsg + \cacg}
+\pgfmathsetmacro{\rbceul}{\sasbcg - \casg}
+\pgfmathsetmacro{\rcaeul}{-\sinbeta}
+\pgfmathsetmacro{\rcbeul}{\cbsg}
+\pgfmathsetmacro{\rcceul}{\cbcg}
+}
+}
+
+\tdplotsetmaincoords{60}{10}
+\tdseteulerxyz
+\begin{tikzpicture}[tdplot_main_coords]
+  % paper axes
+  % \draw[thick,->] (0,0,0) -- (1,0,0) node[anchor=north east]{$x$};
+  % \draw[thick,->] (0,0,0) -- (0,1,0) node[anchor=north west]{$y$};
+  % \draw[thick,->] (0,0,0) -- (0,0,1) node[anchor=south]{$z$};
+  \tdplotsetrotatedcoords{0}{0}{180}
+  \draw[thick,tdplot_rotated_coords,->] (0,0,0) --
+  (1,0,0) node[anchor=north]{$x$};
+  \draw[thick,tdplot_rotated_coords,->] (0,0,0) --
+  (0,1,0) node[anchor=east]{$y$};
+  \draw[thick,tdplot_rotated_coords,->] (0,0,0)
+  \draw(0,0,1) node[anchor=north]{$z$};
+
+  \draw [thick,tdplot_rotated_coords,->] (0,0) circle;%
+
+\end{tikzpicture}
