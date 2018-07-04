@@ -3,23 +3,78 @@
 \section{6DoF Model structure}
 \label{sec:6dofconcept}
 The state of the car is identified by the six degrees of freedom required to define the spacial position and orientation of its chassis. The car interacts with the road through a simplified suspension system.
-The model outputs are the vertical forces on each of the four wheels, calculated as the force in each of the suspesion systems and the velocities of the respective ground contact points, which may be used to calculate friction forces by an external tyre model.
+The model outputs are the vertical forces on each of the four wheels, obtained as the forces acting through each of the suspesion systems, and the velocities of the respective ground contact points, all of which may be used to calculate friction by an external tyre model.
 Inputs to the model are the longitudinal and lateral forces acting on each wheel and the angle of the front wheels which is used to rotate the force vectors acting on them, in order to obtain steering control.
 The block diagram in \todo{figura} shows the intended flow of information for this model working in conjuction with a tyre model.
 \section{Chassis description}
 \label{sec:body}
-The chassis is represented by a rigid body whose mass and rotational inertia resemble those of the entire vehicle, comprehensive of the driver and the wheels, this body is assumed to be simmetrical about the longitudinal-vertical plane. This eliminates the product of inertia terms between the
-The road is assumed to be a horizontal plane, so we can define the $xyz$ inertial reference system where $z$ is pointed downwards, in the direction of the gravitational acceleration vector, $x$ and $y$ lie on the road surface and may be arbitrarily chosen as long as the right-hendedness of the reference frame is maintained.
-When the vehicle is static and in equilibrium we proceed to define the body reference system $x'y'z'$, orginated at the Center of Gravity of the chassis: $y$ is directe
-\todo{SAE J670}
+The road is assumed to be a horizontal plane, so we can define the $xyz$ inertial reference system where $z$ is pointed downwards, in the direction of gravity, $x$ and $y$ lie on the road surface and may be arbitrarily chosen as long as the right-handedness of the reference frame is guaranteed.
+The chassis is represented by a rigid body whose mass $m$ and rotational inertia matrix $I$ resemble those of the entire vehicle, inclusive of the driver and the wheels.
+The body reference system $x'y'z'$ is fixed to the chassis and originates at the Center of Gravity. An unambiguous definition of the axes is made in the static equilibrium orientation when the suspension system is bearing the weight of the car and no other forces are at play. In this condition $z'$ is defined to be parallel to $z$ and likewise pointed downwards, $x'$ is directed forwards, parallel to the road plane, and the $y'$ axis is oriented to the right of the car as seen by the driver.
+The attitude of the chassis is defined by the Tait-Bryan angles mapping the inertial system axes to the chassis axes \todo{appendix}
+\todo{figura SAE J670}. Note that the given definition for the chassis reference system implies zero roll and pitch at static equilibrium.
+The chassis is assumed to be symmetrical about the $x'z'$ plane, this identifies the $y'$ axis as a principle axis of inertia and eliminates all the related product of inertia terms, yielding
+$$ I = \begin{bmatrix}
+    I_{xx} & 0      & I_{xz}\\
+    0      & I_{yy} & 0     \\
+    I_{xz} & 0      & x_{zz}
+\end{bmatrix}.$$
 
-\todo{usare molteplici figure: 1. sistemi di riferimento e coordinate lagrangiane - 2. sospensioni su un solo asse - 3. vista 3d delle sospensioni su una sola ruota - 4. vista 3d dei soli punti di attacco}
-The rigid body represents all the mass of the vehicle including dri
+\todo{usare molteplici figure: 1. sistemi di riferimento e coordinate lagrangiane - 2. sospensioni su un solo asse - 3. vista 3d delle sospensioni su una sola ruota - 4. vista 3d completa ma senza molle}
+
+
+\section{Suspension}
+\label{sec:suspension}
+Suspension is represented by four vertical spring-damper systems associated with each wheel of the car. Quantities relating to each of the systems will be distinguished by subscripts according to Table \ref{table:subscripts}, the $w$ subscript is used when referring generically to any one of them.
+
+\begin{table}[ht]
+\caption{Wheel and suspension systems subscripts} % title of Table
+\centering % used for centering table
+\begin{tabular}{l l l l} % left aligned columns (4 columns)
+\hline\hline %inserts double horizontal lines
+Subscript & Pertaining wheel or suspension system \\ [0.5ex] % inserts table
+%heading
+\hline % inserts single horizontal line
+$FR$ & Front Right \\ % inserting body of the table
+$FL$ & Front Left \\
+$RR$ & Rear Right \\
+$RL$ & Rear Left \\ [1ex] % [1ex] adds vertical space
+\hline %inserts single line
+\end{tabular}
+\label{table:subscripts} % is used to refer this table in the text
+\end{table}
+
+The upper end of each suspension system is attached to an appropriate point $P_w$ statically defined with respect to the chassis, the lower end point, $W_w$, is obtained by projecting $P_w$ onto the road plane.
+Figure \todo{figura} shows the front suspension system in equilibrium with a lateral force acting on the center of gravity and friction acting on the wheel contact points.
+
+The chassis system co-ordinates for the point $P_w$ are chosen in order to obtain realistic vehicle roll dynamics for small roll angles.
+
+All automotive suspension systems are characterized by a roll center for each axle. This is the point at which lateral forces acting on the wheels are reacted to the chassis.
+In a two axle vehicle the roll axis is defined as the line passing through the front and rear roll centers. If the chassis center of mass does not lie on this line then a moment arm will be present and lateral forces will induce roll movements.
+The position of the roll centers is determined by suspension kinematics and dynamic load distribution and is tipically below the center of gravity, causing vehicles to lean towards the outside of turns when driving, this is identical to the situation shown in the \todo{previous} image, where the lateral force at the center of mass is the centrifugal force acting in the non inertial reference frame of the car.
+
+According to the SAE definition a roll center is
+
+\textit{\say{The point in the transverse vertical plane through any pair of wheel centers at which lateral forces may be applied to the sprung mass without producing suspension roll}}
+
+This definition relates the $P_w$ points to the roll center
+
+If an additional side force acting on the midpoint $M$ of $P_{FR}$ and $P_{FL}$ is added the fact that the spring systems are constrained in the vertical orientation means the horizontal reaction forces acting at the ground contact points $W_{FR}$ and $W_{FL}$ may be seen as acting directly on the chassis at the points $P_{FR}$ and $P_{FL}$ respectively, with equal and opposite moment arms with respect to the
+
+
+in the absence of weight transfer.
+with the external force and consequently no roll torque.
+
+
+ when there is zero roll or weight transfer is small
+
+
+constrained to the road plane but is allowed to slide obtained by prjecting
+
+  whose orientation is constrained in the vertical orientation, that is
 Each spring represents the suspension of one of the wheels, with one end attached to the
 The springs are constrained in the vertical orientation, but are allowed to slide with the lower end
 the rigid body represent
-\section{Suspension}
-\label{sec:suspension}
 \section{Limitations}
 \label{sec:6doflimits}
 While this model benefits from the simplicity of it's description
