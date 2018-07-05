@@ -45,36 +45,85 @@ $RL$ & Rear Left \\ [1ex] % [1ex] adds vertical space
 \end{table}
 
 The upper end of each suspension system is attached to an appropriate point $P_w$ statically defined with respect to the chassis, the lower end point, $W_w$, is obtained by projecting $P_w$ onto the road plane.
-Figure \todo{figura} shows the front suspension system in equilibrium with a lateral force acting on the center of gravity and friction acting on the wheel contact points.
 
-The chassis system co-ordinates for the point $P_w$ are chosen in order to obtain realistic vehicle roll dynamics for small roll angles.
+The correct weight transfer effects are obtained by assigning the corresponding wheel contact point $x$ and $y$ coordinates to each of the $P_w$ points, these are easily calculated from the front and rear track lengths ($t_f$ and $t_r$) and the distances of the front and rear axles from the CoG.
 
-All automotive suspension systems are characterized by a roll center for each axle. This is the point at which lateral forces acting on the wheels are reacted to the chassis.
-In a two axle vehicle the roll axis is defined as the line passing through the front and rear roll centers. If the chassis center of mass does not lie on this line then a moment arm will be present and lateral forces will induce roll movements.
-The position of the roll centers is determined by suspension kinematics and dynamic load distribution and is tipically below the center of gravity, causing vehicles to lean towards the outside of turns when driving, this is identical to the situation shown in the \todo{previous} image, where the lateral force at the center of mass is the centrifugal force acting in the non inertial reference frame of the car.
+The height of the points $P_w$ are finally chosen in order to obtain realistic roll dynamics.
 
-According to the SAE definition a roll center is
+All automotive suspension systems may be characterized by a roll center for each axle. This is the point at which lateral forces acting on the wheels are reacted to the chassis.
+The roll center is typically below the center of mass, causing vehicles to lean towards the outside of turns when driving, this is in line with the situation shown in \todo{image}, where the lateral force at the center of mass is the centrifugal force acting in the non inertial reference frame of the car, balanced by friction acting on the wheel contact points.
+The roll center height is determined by suspension kinematics and dynamic load distribution so it is not always constant. The SAE definition of roll center is
 
 \textit{\say{The point in the transverse vertical plane through any pair of wheel centers at which lateral forces may be applied to the sprung mass without producing suspension roll}}
 
-This definition relates the $P_w$ points to the roll center
+This definition directly relates the $P_w$ points to the roll center height.
 
-If an additional side force acting on the midpoint $M$ of $P_{FR}$ and $P_{FL}$ is added the fact that the spring systems are constrained in the vertical orientation means the horizontal reaction forces acting at the ground contact points $W_{FR}$ and $W_{FL}$ may be seen as acting directly on the chassis at the points $P_{FR}$ and $P_{FL}$ respectively, with equal and opposite moment arms with respect to the
+This can be explained by modifying a generic equilibrium situation such as the one described in figure \todo{la stessa di prima} and applying a new side force $F'$ acting on the midpoint $M_F$ of $P_{FR}$ and $P_{FL}$, if the tyres are capable of generating the necessary friction forces ($F_1$ and $F_2$), the system will settle in a new equilibrium state.
+The sum of vertical forces acting on the tyres does not change as it is equal to
+$$
+F_z := F_{z1}+F_{z2} = mg.
+$$
 
+As $F_z$ does not change, the increase in side friction force is entirely due to changes in the lateral friction coefficients, which are both taken as equal to $\mu_y$.
 
-in the absence of weight transfer.
-with the external force and consequently no roll torque.
+The fact that the spring systems are constrained in the vertical orientation means the horizontal forces acting at the ground contact points effect the chassis directly at the points $P_{FR}$ and $P_{FL}$ respectively.
 
+The horizontal force balance is given by
+$$
+F + F' = F_1 + F_2 = \mu_y ( F_{z1} + F_{z2} ) = \mu_y mg
+$$
 
- when there is zero roll or weight transfer is small
+To find the equilibrium roll angle the torque balance about point $M_F$ must be solved
 
+$$
+\frac{t_F}{2} \sin \phi (F_1-F_2) - \frac{t_F}{2} \cos \phi ( F_{z1} - F_{z2} ) - F h_F  \cos \phi = 0
+$$
+substituting the friction forces yields
+$$
+\frac{t_F}{2} ( F_{z1} - F_{z2} ) [\mu_y \sin \phi - \cos \phi ] - F h_F  \cos \phi = 0
+$$
 
-constrained to the road plane but is allowed to slide obtained by prjecting
+The vertical forces act through the suspension springs. As Hooke's law is linear, the difference between them is proportional to the difference between the spring lengths which is in turn obtained as a function of the roll angle.
+$$
+F_{z1} - F_{z2} = - k_F t_F \sin \phi
+$$
 
-  whose orientation is constrained in the vertical orientation, that is
-Each spring represents the suspension of one of the wheels, with one end attached to the
-The springs are constrained in the vertical orientation, but are allowed to slide with the lower end
-the rigid body represent
+The moment balance then becomes
+
+$$
+\mu_y k_F \frac{t_F^2}{2} \sin^2 \phi - k_F \frac{t_F^2}{2} \sin \phi \cos \phi - Fh_F \cos \phi = 0
+$$
+
+\todo{find source for roll angles in passenger cars being a few ° max} The equation may be linearized with respect to $\phi$.
+
+$$
+- k_F \frac{t_F^2}{2}  \phi  - Fh_F = 0
+$$
+
+Doing so makes the solution for $\phi$ independent of $\mu_y$, the only quantity influenced by $F'$. The height of point $M_F$ is then effectively the roll center height according to the SAE definition.
+
+The roll rate $K_\phi$ is defined as roll angle per unit of lateral force applied to the CG \todo{find source}, applying this definition to the linearized equation gives
+
+$K_\phi = \frac{\phi}{F} = \frac{2h}{K_Ft_F^2}$
+
+This expression can be used to derive spring rates for the 6DoF model in order to match the roll-rate of the car.
+
+\begin{table}[ht]
+\caption{Coordinates of the suspension force application points} % title of Table
+\centering % used for centering table
+\begin{tabular}{l l l l l} % left aligned columns (4 columns)
+\hline\hline %inserts double horizontal lines
+Chassis system co-ordinate & $P_FR$ & $P_FL$ & $P_RR$ & $P_RL$ \\ [0.5ex] % inserts table
+%heading
+\hline % inserts single horizontal line
+$ x$ & $ l_f$ & $ l_f$ & $-l_r $ & $-l_r $\\ % inserting body of the table
+$ y$ & $ \frac{t_f}{2} $ & $ -\frac{t_f}{2}$ & $ \frac{t_r}{2}$ & $ -\frac{t_r}{2}$\\ % inserting body of the table
+$ z$ & $ h_{CG} - q_F $& $ h_{CG} - q_F $ & $ h_{CG} - q_R$ & $ h_{CG} - q_R$ \\ [1ex] % [1ex] adds vertical space
+\hline %inserts single line
+\end{tabular}
+\label{table:susppoints} % is used to refer this table in the text
+\end{table}
+
 \section{Limitations}
 \label{sec:6doflimits}
 While this model benefits from the simplicity of it's description
