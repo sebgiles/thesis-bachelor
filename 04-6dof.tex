@@ -2,132 +2,158 @@
 \label{chap:6dof}
 \section{6DoF Model structure}
 \label{sec:6dofconcept}
-The state of the car is identified by the six degrees of freedom required to define the spacial position and orientation of its chassis. The car interacts with the road through a simplified suspension system.
-The model outputs are the vertical forces on each of the four wheels, obtained as the forces acting through each of the suspesion systems, and the velocities of the respective ground contact points, all of which may be used to calculate friction by an external tyre model.
-Inputs to the model are the longitudinal and lateral forces acting on each wheel and the angle of the front wheels which is used to rotate the force vectors acting on them, in order to obtain steering control.
+The state of the car is identified by the six degrees of freedom required to define the position and orientation of its chassis. The car interacts with the road through a simplified suspension system.
+The model outputs are the vertical forces on each of the four wheels and the velocities of the respective ground contact points, which may be used to calculate friction by an external tyre model.
+Inputs to the model are the longitudinal and lateral forces acting on each wheel and the steering angle. The latter effectively rotates the force vectors of the front wheels allowing direction control.
 The block diagram in \todo{figura} shows the intended flow of information for this model working in conjuction with a tyre model.
 \section{Chassis description}
 \label{sec:body}
-The road is assumed to be a horizontal plane, so we can define the $xyz$ inertial reference system where $z$ is pointed downwards, in the direction of gravity, $x$ and $y$ lie on the road surface and may be arbitrarily chosen as long as the right-handedness of the reference frame is guaranteed.
+The road is assumed to be a horizontal plane. In the $xyz$ inertial reference system $z$ is pointed downwards, in the direction of gravity whilst $x$ and $y$ lye on the road surface and may be arbitrarily chosen as long as the right-handedness of the reference frame is guaranteed.
+
 The chassis is represented by a rigid body whose mass $m$ and rotational inertia matrix $I$ resemble those of the entire vehicle, inclusive of the driver and the wheels.
-The body reference system $x'y'z'$ is fixed to the chassis and originates at the Center of Gravity. An unambiguous definition of the axes is made in the static equilibrium orientation when the suspension system is bearing the weight of the car and no other forces are at play. In this condition $z'$ is defined to be parallel to $z$ and likewise pointed downwards, $x'$ is directed forwards, parallel to the road plane, and the $y'$ axis is oriented to the right of the car as seen by the driver.
+
+The body reference system $x'y'z'$ is fixed to the chassis and originates at the Center of Gravity. An unambiguous definition of the axes is made in the static equilibrium orientation when the suspension system is bearing the weight of the car and no other forces are at play (this will be later referenced as the \textit{resting condition}). In this condition $z'$ is defined to be parallel to $z$ and likewise pointed downwards, $x'$ is directed forwards, parallel to the road plane, and the $y'$ axis is oriented to the right of the car as seen by the driver.
+
 The attitude of the chassis is defined by the Tait-Bryan angles mapping the inertial system axes to the chassis axes \todo{appendix}
 \todo{figura SAE J670}. Note that the given definition for the chassis reference system implies zero roll and pitch at static equilibrium.
-The chassis is assumed to be symmetrical about the $x'z'$ plane, this identifies the $y'$ axis as a principle axis of inertia and eliminates all the related product of inertia terms, yielding
-$$ I = \begin{bmatrix}
-    I_{xx} & 0      & I_{xz}\\
-    0      & I_{yy} & 0     \\
-    I_{xz} & 0      & x_{zz}
-\end{bmatrix}.$$
+
+The chassis is assumed to be symmetrical about the $x'z'$ plane, this identifies the $y'$ axis as a principle axis of inertia and eliminates all the related product of inertia terms from the inertia matrix evaluated in the chassis reference system.
+$$
+I = \begin{bmatrix}
+I_{xx} & 0      & I_{xz}\\
+0      & I_{yy} & 0     \\
+I_{xz} & 0      & x_{zz}
+\end{bmatrix}.
+$$
 
 \todo{usare molteplici figure: 1. sistemi di riferimento e coordinate lagrangiane - 2. sospensioni su un solo asse - 3. vista 3d delle sospensioni su una sola ruota - 4. vista 3d completa ma senza molle}
 
 
 \section{Suspension}
 \label{sec:suspension}
-Suspension is represented by four vertical spring-damper systems associated with each wheel of the car. Quantities relating to each of the systems will be distinguished by subscripts according to Table \ref{table:subscripts}, the $w$ subscript is used when referring generically to any one of them.
+Suspension is represented by four vertical linear spring-damper systems associated with each wheel of the car. Quantities relating to each of the systems will be distinguished by subscripts according to Table \ref{table:subscripts}, the $w$ subscript is used when referring generically to any one of them.
 
 \begin{table}[ht]
-\caption{Wheel and suspension systems subscripts} % title of Table
-\centering % used for centering table
-\begin{tabular}{l l l l} % left aligned columns (4 columns)
-\hline\hline %inserts double horizontal lines
-Subscript & Pertaining wheel or suspension system \\ [0.5ex] % inserts table
-%heading
-\hline % inserts single horizontal line
-$FR$ & Front Right \\ % inserting body of the table
-$FL$ & Front Left \\
-$RR$ & Rear Right \\
-$RL$ & Rear Left \\ [1ex] % [1ex] adds vertical space
-\hline %inserts single line
-\end{tabular}
-\label{table:subscripts} % is used to refer this table in the text
+  \caption{Wheel and suspension systems subscripts} % title of Table
+  \centering % used for centering table
+  \begin{tabular}{l l l l} % left aligned columns (4 columns)
+    \hline\hline %inserts double horizontal lines
+    Subscript & Pertaining wheel or suspension system \\ [0.5ex] % inserts table
+    %heading
+    \hline % inserts single horizontal line
+    $FR$ & Front Right \\ % inserting body of the table
+    $FL$ & Front Left \\
+    $RR$ & Rear Right \\
+    $RL$ & Rear Left \\ [1ex] % [1ex] adds vertical space
+    \hline %inserts single line
+  \end{tabular}
+  \label{table:subscripts} % is used to refer this table in the text
 \end{table}
 
 The upper end of each suspension system is attached to an appropriate point $P_w$ statically defined with respect to the chassis, the lower end point, $W_w$, is obtained by projecting $P_w$ onto the road plane.
+The spring length $h_w$ is given by the distance between $W_w$ and $P_w$ and is equal to the opposite of the inertial system $z$ coordinate of $P_w$.
 
-The correct weight transfer effects are obtained by assigning the corresponding wheel contact point $x$ and $y$ coordinates to each of the $P_w$ points, these are easily calculated from the front and rear track lengths ($t_f$ and $t_r$) and the distances of the front and rear axles from the CoG.
+The correct weight transfer effects are obtained by assigning the corresponding wheel contact point $x$ and $y$ coordinates to each of the $P_w$ points, these are easily calculated from the front and rear track lengths ($t_F$ and $t_R$) and the distances of the front and rear axles from the CoG ($l_F$ and $l_R$).
 
-The height of the points $P_w$ are finally chosen in order to obtain realistic roll dynamics.
+The $z$ co-ordinates of the $P_w$ points with respect to the chassis system are finally chosen in order to obtain realistic roll dynamics.
 
-All automotive suspension systems may be characterized by a roll center for each axle. This is the point at which lateral forces acting on the wheels are reacted to the chassis.
-The roll center is typically below the center of mass, causing vehicles to lean towards the outside of turns when driving, this is in line with the situation shown in \todo{image}, where the lateral force at the center of mass is the centrifugal force acting in the non inertial reference frame of the car, balanced by friction acting on the wheel contact points.
-The roll center height is determined by suspension kinematics and dynamic load distribution so it is not always constant. The SAE definition of roll center is
+Automotive suspension systems can be characterized by a roll center for each axle. This is the point at which lateral forces acting on the wheels are reacted to the chassis.
+The roll center is usually below the center of mass, causing vehicles to lean towards the outside of turns when driving, this is in line with the situation shown in \todo{image}, where the lateral force at the center of mass is the centrifugal force acting in the non inertial reference frame of the car, balanced by friction acting on the wheel contact points.
 
-\textit{\say{The point in the transverse vertical plane through any pair of wheel centers at which lateral forces may be applied to the sprung mass without producing suspension roll}}
+The roll center height, as defined by the SAE in J670, is determined by suspension kinematics and dynamic load distribution so it is almost never constant.
+In the developed model, each roll center is approximated by the midpoint of the left and right $P_w$ points of the corresponding axle. Appendix \ref{chap:roll} justifies this approximation.
 
-This definition directly relates the $P_w$ points to the roll center height.
-
-This can be explained by modifying a generic equilibrium situation such as the one described in figure \todo{la stessa di prima} and applying a new side force $F'$ acting on the midpoint $M_F$ of $P_{FR}$ and $P_{FL}$, if the tyres are capable of generating the necessary friction forces ($F_1$ and $F_2$), the system will settle in a new equilibrium state.
-The sum of vertical forces acting on the tyres does not change as it is equal to
-$$
-F_z := F_{z1}+F_{z2} = mg.
-$$
-
-As $F_z$ does not change, the increase in side friction force is entirely due to changes in the lateral friction coefficients, which are both taken as equal to $\mu_y$.
-
-The fact that the spring systems are constrained in the vertical orientation means the horizontal forces acting at the ground contact points effect the chassis directly at the points $P_{FR}$ and $P_{FL}$ respectively.
-
-The horizontal force balance is given by
-$$
-F + F' = F_1 + F_2 = \mu_y ( F_{z1} + F_{z2} ) = \mu_y mg
-$$
-
-To find the equilibrium roll angle the torque balance about point $M_F$ must be solved
-
-$$
-\frac{t_F}{2} \sin \phi (F_1-F_2) - \frac{t_F}{2} \cos \phi ( F_{z1} - F_{z2} ) - F h_F  \cos \phi = 0
-$$
-substituting the friction forces yields
-$$
-\frac{t_F}{2} ( F_{z1} - F_{z2} ) [\mu_y \sin \phi - \cos \phi ] - F h_F  \cos \phi = 0
-$$
-
-The vertical forces act through the suspension springs. As Hooke's law is linear, the difference between them is proportional to the difference between the spring lengths which is in turn obtained as a function of the roll angle.
-$$
-F_{z1} - F_{z2} = - k_F t_F \sin \phi
-$$
-
-The moment balance then becomes
-
-$$
-\mu_y k_F \frac{t_F^2}{2} \sin^2 \phi - k_F \frac{t_F^2}{2} \sin \phi \cos \phi - Fh_F \cos \phi = 0
-$$
-
-\todo{find source for roll angles in passenger cars being a few ° max} The equation may be linearized with respect to $\phi$.
-
-$$
-- k_F \frac{t_F^2}{2}  \phi  - Fh_F = 0
-$$
-
-Doing so makes the solution for $\phi$ independent of $\mu_y$, the only quantity influenced by $F'$. The height of point $M_F$ is then effectively the roll center height according to the SAE definition.
-
-The roll rate $K_\phi$ is defined as roll angle per unit of lateral force applied to the CG \todo{find source}, applying this definition to the linearized equation gives
-
-$K_\phi = \frac{\phi}{F} = \frac{2h}{K_Ft_F^2}$
-
-This expression can be used to derive spring rates for the 6DoF model in order to match the roll-rate of the car.
+The roll center heights ($q_F$ and $q_R$) are a common design specification in race cars.
+Their values can be obtained by means of multibody simulation, experimental tests or kinematic approximations.
+$q_F$ and $q_R$  are given with respect to ground in the resting condition even though they are relevant when considered in respect to the CoG height and tend to move with the chassis of the vehicle.
+When the model is in the resting condition the height of each of the $P_w$ points is made to match the corresponding roll center height by completing their definition as in table \ref{table:susppoints}.
 
 \begin{table}[ht]
-\caption{Coordinates of the suspension force application points} % title of Table
-\centering % used for centering table
-\begin{tabular}{l l l l l} % left aligned columns (4 columns)
-\hline\hline %inserts double horizontal lines
-Chassis system co-ordinate & $P_FR$ & $P_FL$ & $P_RR$ & $P_RL$ \\ [0.5ex] % inserts table
-%heading
-\hline % inserts single horizontal line
-$ x$ & $ l_f$ & $ l_f$ & $-l_r $ & $-l_r $\\ % inserting body of the table
-$ y$ & $ \frac{t_f}{2} $ & $ -\frac{t_f}{2}$ & $ \frac{t_r}{2}$ & $ -\frac{t_r}{2}$\\ % inserting body of the table
-$ z$ & $ h_{CG} - q_F $& $ h_{CG} - q_F $ & $ h_{CG} - q_R$ & $ h_{CG} - q_R$ \\ [1ex] % [1ex] adds vertical space
-\hline %inserts single line
-\end{tabular}
-\label{table:susppoints} % is used to refer this table in the text
+  \caption{Coordinates of the suspension force application points} % title of Table
+  \centering % used for centering table
+  \begin{tabular}{l l l l l} % left aligned columns (4 columns)
+    \hline\hline %inserts double horizontal lines
+    Chassis system co-ordinate & $P_{FR}$ & $P_{FL}$ & $P_{RR}$ & $P_{RL}$ \\ [0.5ex] % inserts table
+    %heading
+    \hline % inserts single horizontal line
+    $ x$ & $ l_f$ & $ l_f$ & $-l_r $ & $-l_r $\\ % inserting body of the table
+    $ y$ & $ \frac{t_f}{2} $ & $ -\frac{t_f}{2}$ & $ \frac{t_r}{2}$ & $ -\frac{t_r}{2}$\\ % inserting body of the table
+    $ z$ & $ h_{CG} - q_F $& $ h_{CG} - q_F $ & $ h_{CG} - q_R$ & $ h_{CG} - q_R$ \\ [1ex] % [1ex] adds vertical space
+    \hline %inserts single line
+  \end{tabular}
+  \label{table:susppoints} % is used to refer this table in the text
 \end{table}
 
-\section{Limitations}
-\label{sec:6doflimits}
-While this model benefits from the simplicity of it's description
-The main limitation of this model is the lack of the wheel rotational dynamics, which leads to missing reaction torques present during acceleration and braking.
+Appendix \ref{chap:roll} also shows that the linear spring rates for the model should be chosen as
+$$
+k_F = \frac{\phi}{F} = 2\frac{h_{CG}-q_F}{K_{\phi F} t_F^2}.
+$$
+$$
+k_R = \frac{\phi}{F} = 2\frac{h_{CG}-q_R}{K_{\phi R} t_F^2}.
+$$
+
+To make the model of the car sit in the resting position with zero pitch angle and the correct CoG height the unloaded spring lengths must be
+$$ h_{F0} = q_F + \frac{mg}{2k_F}\frac{l_R}{l_R+l_F} $$
+$$ h_{R0} = q_r + \frac{mg}{2k_R}\frac{l_F}{l_R+l_F} $$
+
+\section{Lagrangian formulation of the problem}
+\label{sec:6doflag}
+Equations of motion were obtained by solving the lagrangian formulation of the system with respect to the inertial reference frame.
+The chosen lagrangian coordinates are, in order, the yaw, pitch and roll angles and the coordinates of the chassis CoG
+$$
+q = \begin{bmatrix}
+\psi \\
+\theta \\
+\phi \\
+x_{CG} \\
+y_{CG} \\
+z_{CG}
+\end{bmatrix}.
+$$
+The gravitational potential energy is
+$$U_{grav} = -mgz_{CG}$$
+The potential energy stored in the suspension springs is
+$$ U_{spring} = \frac{1}{2} k_F [(h_{FR} - h_{F0})^2 + (h_{FL} - h_{F0})^2] +  \frac{1}{2} k_R [(h_{RR} - h_{R0})^2 + (h_{RL} - h_{R0})^2] $$
+
+The total potential energy function is
+$$ U = U_{spring} + U_{grav} $$
+
+The damping effect of the suspension is modelled by the Rayleigh dissipation function
+$$ D = \frac{1}{2} b_F (\dot h_{FR}^2 + \dot h_{FL}^2) + \frac{1}{2} b_R (\dot h_{RR}^2 + \dot h_{RL}^2) $$
+$b_F$ and $b_r$ are the damping ratios of the spring damper systems. \todo{how to get these parameters?}
+
+The translational kinetic energy of the car is given by
+$$ T_{trans} = \frac{1}{2} m (\dot x_{CG}^2 +\dot y_{CG}^2 +\dot z_{CG}^2 ) $$
+
+The rotational kinetic energy is obtained from the expression
+$$ T_{rot} = \frac{1}{2}\omega^T I \omega $$
+
+The angular velocity vector $\omega$ must be expressed with respect to the same axes as the inertia matrix, i.e. the chassis reference frame \todo{maths appendix for the transformation}.
+
+The total kinetic energy function is then
+$$ T = T_{rot} + T_{trans} $$
+
+The steering angle input $\delta$ acts like a time changing parameter in the model.
+The tyre horizontal force component inputs $F_wx$ $F_wy$ are to be expressed with respect to each of the wheel reference systems.
+
+To obtain the generalized forces vector $Q$. The external forces are rotated into inertial frame co-ordinates and applied to the $W_w$ points.
+
 \section{6DoF Dynamics equation set}
 \label{sec:6dofeq}
 \todo{districare il groviglio che mi lascia Matlab}
+
+\section{Output functions}
+\label{sec:6dofout}
+The vertical wheel load outputs are calculated by the forces acting in the suspension systems.
+$$Z_FR = - k_F (h_{FR} - h_{F0}) - b_F \dot h_{FR} $$
+$$Z_FL = - k_F (h_{FL} - h_{F0}) - b_F \dot h_{FL} $$
+$$Z_RR = - k_R (h_{RR} - h_{R0}) - b_R \dot h_{RR} $$
+$$Z_RL = - k_R (h_{RL} - h_{R0}) - b_R \dot h_{RL} $$
+
+The contact point velocities output is given by the time derivatives of the $W_w$ points' co-ordinates in the inertial frame rotated into wheel system co-ordinates.
+
+The outputs expressed as fuctions of the lagrangian coordinates are:
+\todo{districa matlab}
+
+\section{Limitations}
+\label{sec:6doflimits}
