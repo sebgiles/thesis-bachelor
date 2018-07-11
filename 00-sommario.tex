@@ -1,0 +1,22 @@
+\sommarioITA
+I motori elettrici non contengono parti mobili all'infuori dell'assieme dell'albero motore, questo li rende più compatti e più semplici rispetto a motori termici di prestazioni simili. L'utilizzo di più motori per la trazione dei veicoli è quindi fattibile senza incorrere in eccessivo peso o complessità. L'Utilizzo di un motore per ogni ruota motrice può ridurre peso, dimensioni e complessità della trasmissione. Questo è dato dall'assenza dei differenziali e dal fatto che la potenza meccanica possa essere prodotta più vicino alle ruote.
+
+I motori possono inoltre essere controllati individualmente per produrre coppie differenti, risultando in un momento di rotazione attorno all'asse verticale, questa strategia di controllo è chiamata torque vectoring.
+Il torque vectoring può essere usato per corregere una vettura sovrasterzante o sottsterzante, migliorando la sicurezza dei veicoli stradali e la maneggevolezza di auto da competizione.
+Il controllo della trazione è inoltre ottenibile indipendentemente per ogni ruota, permettendo di percorrere curve a velocità maggiori.
+
+L'obiettivo di questo studio è la derivazione di un modello matematico utilizzabile in simulazione e per lo sviluppo di controllori per il torque vectoring e il controllo della trazione nei veicoli elettrici.
+
+L'interesse per lo sviluppo del modello è sorto in vista di una prossima partecipazione alle competizioni di Formula Student Electric. Il modello è quindi concepito per applicazioni competitive. L'alta rigidezza sospensiva, diffusa nelle vetture che competono in queste competizioni, è stata tenuta in considerazione per ottenere alcune approssimazioni.
+
+La modellazione delle dinamiche di rollio rende prevedibili i transitori di trasferimento di carico, garantendo maggiore precisione durante le manovre a frequenza più alta come i cambi di corsia, le piccole chicane e gli stretti slalom che tipicamente compongono i percorsi degli eventi di Autocross ed Endurance in Formula Student.
+L'inclusione del comportamento di beccheggio e rollio permette anche di studiare la correlazione tra i trasferimenti di carico e l'escursione delle sospensioni, essendo quest'ultima una grandezza fisica facilmente misurabile in tempo reale e quindi utilizzabile come ingresso al sistema di controllo del veicolo.
+Le dinamiche di sterzo posteriori sono incluse nel secondo modello presentato poichè il regolamento Formula Student permette esplicitamente l'utilizzo di quattro ruote sterzanti e la modellazione non ha richiesto alcun impegno aggiuntivo.
+
+Il capitolo \ref{chap:6dof} descrive fisicamente un modello a sei gradi di libertà, successivamente ne viene fornita la formulazione lagrangiana. Nel capitolo \ref{chap:12dof} il modello viene esteso con 6 gradi di libertà aggiuntivi per la descrizione della rotazione delle ruote e delle dinamiche di sterzo anteriore e posteriore.
+
+La formulazione lagrangiana è stata costruita simbolicamente utilizzando la  MATLAB Symbolic Math Toolbox per facilitare le derivate e le trasformazioni di coordinate.
+Sono state scritte delle funzioni per risolvere algebricamente le equazioni di Lagrange e fornire una rappresentazione in spazio di stato del sistema.
+Tutti gli script sono scritti in forma vettoriale rendendo il codice più compatto e leggibile
+Le simulazioni sono state eseguite in ambiente simulink, in cui i due modelli matematici ottenuti sono stati implementati in forma modulare, accompagnati da un modello empirico per le forze di attrito generate dagli pneumatici.
+L'utilizzo di un'animazione 2D della vettura ha facilitato la risoluzione dei problemi rendendo più intuibile il siginificato dei risultati numerici.

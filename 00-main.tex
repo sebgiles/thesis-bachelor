@@ -58,7 +58,7 @@
 % PYTHON - BIANCO E NERO
 \lstset{%
 	captionpos=b,
-	language=Python,
+	language=Matlab,
 	basicstyle =\small\ttfamily,
 	keywordstyle=\color{black}\bfseries,
 	breaklines=true,
@@ -179,28 +179,28 @@
 
 \frontmatter
 
-% DEDICA - PERSONALIZZARE
-% VSPACE - PROPORZIONE USATA PER CENTRATURA VERTICALE DEL TESTO
-% FLUSHRIGHT - ALLINEAMENTO ORIZZONTALE A DESTRA
-\vspace*{\stretch{1}}
-\begin{flushright}
-\noindent
-Dedicato a qualcuno
-\end{flushright}
-\vspace*{\stretch{6}}
-\cleardoublepage
-
-% CITAZIONE - PERSONALIZZARE
-% VSPACE - PROPORZIONE USATA PER CENTRATURA VERTICALE DEL TESTO
-% FLUSHRIGHT - ALLINEAMENTO ORIZZONTALE A DESTRA
-\vspace*{\stretch{1}}
-\begin{flushright}
-\noindent
-Citazione
-\textit{Qualcuno}
-\end{flushright}
-\vspace*{\stretch{6}}
-\cleardoublepage
+% % DEDICA - PERSONALIZZARE
+% % VSPACE - PROPORZIONE USATA PER CENTRATURA VERTICALE DEL TESTO
+% % FLUSHRIGHT - ALLINEAMENTO ORIZZONTALE A DESTRA
+% \vspace*{\stretch{1}}
+% \begin{flushright}
+% \noindent
+% Dedicato a qualcuno
+% \end{flushright}
+% \vspace*{\stretch{6}}
+% \cleardoublepage
+%
+% % CITAZIONE - PERSONALIZZARE
+% % VSPACE - PROPORZIONE USATA PER CENTRATURA VERTICALE DEL TESTO
+% % FLUSHRIGHT - ALLINEAMENTO ORIZZONTALE A DESTRA
+% \vspace*{\stretch{1}}
+% \begin{flushright}
+% \noindent
+% Citazione
+% \textit{Qualcuno}
+% \end{flushright}
+% \vspace*{\stretch{6}}
+% \cleardoublepage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -211,11 +211,10 @@ Thanks to someone
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % ABSTRACT - PERSONALIZZARE
-\sommarioITA
-Sommario esteso in italiano richiesto da regolamento UNIVPM
+\include{00-sommario}
 
-\sommario
-Abstract, in English.
+%\sommario
+%Abstract, in English.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -228,10 +227,10 @@ Abstract, in English.
 \listoffigures
 
 % INDICE DELLE TABELLE
-\listoftables
+% \listoftables
 
 % INDICE DEI CODICI
-\listofcodes
+%\listofcodes
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -244,7 +243,7 @@ Abstract, in English.
 \include{03-stateoftheart}
 \include{04-6dof}
 \include{05-12dof}
-\include{06-matlab}
+%\include{06-matlab}
 \include{07-workflow}
 \include{08-conclusion}
 
