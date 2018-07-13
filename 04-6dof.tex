@@ -4,7 +4,7 @@
 \label{sec:6dofconcept}
 The state of the car is identified by the six degrees of freedom required to define the position and orientation of its chassis. The car interacts with the road through a simplified suspension system.
 The model outputs are the vertical forces on each of the four wheels and the velocities of the respective ground contact points, which may be used to calculate friction by an external tyre model.
-Inputs to the model are the longitudinal and lateral forces acting on each wheel and the steering angle. The latter effectively rotates the force vectors of the front wheels allowing direction control.
+Inputs to the model are the longitudinal and lateral forces acting on each wheel and the steering angle. The latter effectively modifies the slip angle and slip ratio of the front wheels and rotates the consequent force vectors thereby allowing direction control.
 The block diagram in figure \ref{6flow} shows the intended flow of information for this model working in conjuction with a tyre model.
 \begin{figure}[ht]
   \centering
@@ -14,11 +14,11 @@ The block diagram in figure \ref{6flow} shows the intended flow of information f
 \end{figure}
 \section{Chassis description}
 \label{sec:body}
-The road is assumed to be a horizontal plane. In the $xyz$ inertial reference system $z$ is pointed downwards, in the direction of gravity whilst $x$ and $y$ lye on the road surface and may be arbitrarily chosen as long as the right-handedness of the reference frame is guaranteed.
+The road is assumed to be a horizontal plane. The $xyz$ inertial reference system is defined by $z$ pointed downwards, in the direction of gravity, whilst $x$ and $y$ lie on the road surface and may be arbitrarily chosen as long as the right-handedness of the reference frame is guaranteed.
 
 The chassis is represented by a rigid body whose mass $m$ and rotational inertia matrix $I$ resemble those of the entire vehicle, inclusive of the driver and the wheels.
 
-The body reference system $x'y'z'$ is fixed to the chassis and originates at the Center of Gravity. An unambiguous definition of the axes is made in the static equilibrium orientation when the suspension system is bearing the weight of the car and no other forces are at play (this will be later referenced as the \textit{resting condition}). In this condition $z'$ is defined to be parallel to $z$ and likewise pointed downwards, $x'$ is directed forwards, parallel to the road plane, and the $y'$ axis is oriented to the right of the car as seen by the driver. The chassis reference system here defined is in line with the SAE J670 definition depicted in figure \ref{saeaxes}.
+The body reference system $x'y'z'$ is fixed to the chassis and originates at the center of mass. An unambiguous definition of the axes is made in the static equilibrium orientation when the suspension system is bearing the weight of the car and no other forces are at play (this will be later referenced as the \textit{resting condition}). In this condition $z'$ is defined to be parallel to $z$ and likewise pointed downwards, $x'$ is directed forwards, parallel to the road plane, and the $y'$ axis is oriented to the right of the car as seen by the driver. The chassis reference system here defined is in line with the SAE J670\cite{j670} definition depicted in figure \ref{saeaxes}.
 \begin{figure}[ht]
   \centering
   \includegraphics[height = 7cm]{images/saeaxes}
@@ -26,7 +26,37 @@ The body reference system $x'y'z'$ is fixed to the chassis and originates at the
   \label{saeaxes}
 \end{figure}
 
-The attitude of the chassis is defined by the Tait-Bryan angles mapping the inertial system axes to the chassis axes \todo{appendix}. Note that the given definition for the chassis reference system implies zero roll and pitch at static equilibrium.
+The attitude of the chassis is defined via the Tait-Bryan angles mapping the inertial system axes to the chassis axes: $\psi$ (yaw), $\theta$ (pitch) and $\phi$ roll).  Note that the previously given definition for the chassis reference system implies zero roll and pitch at static equilibrium.
+
+An undercarriage reference system is also defined as having origin in the CoG projection to the road, its axes $x_uy_uz_u$ are obtained by applying only the yaw rotation to the inertial reference system.
+
+The $R_\psi$ and $R$ matrices can be used to calculate inertial system vector co-ordinates from undercarriage system or vehicle system co-ordinates respectively.
+
+$$
+R_\psi = \begin{bmatrix}
+cos(\psi) & -sin(\psi)      & 0\\
+sin(\psi) & cos(\psi) & 0     \\
+0 & 0      & 1
+\end{bmatrix}.
+$$
+
+$$
+R = \begin{bmatrix}
+cos(\psi) & -sin(\psi)      & 0\\
+sin(\psi) & cos(\psi) & 0     \\
+0 & 0      & 1
+\end{bmatrix}.\begin{bmatrix}
+cos(\theta) & 0      & sin(\theta) \\
+0 & 1 & 0  \\
+-sin(\theta) & 0 & cos(\theta)
+\end{bmatrix}.\begin{bmatrix}
+cos(\phi) & -sin(\phi)      & 0\\
+sin(\phi) & cos(\phi) & 0     \\
+0 & 0      & 1
+\end{bmatrix}.
+$$
+
+Geometric point coordinates can be brought into the inertial frame by rotating the point co-ordinates using the approriate rotation matrix and adding the original reference system origin co-ordinates.
 
 The chassis is assumed to be symmetrical about the $x'z'$ plane, this identifies the $y'$ axis as a principle axis of inertia and eliminates all the related product of inertia terms from the inertia matrix evaluated in the chassis reference system.
 $$
@@ -37,9 +67,7 @@ I_{xz} & 0      & I_{zz}
 \end{bmatrix}.
 $$
 
-\section{Suspension}
-\label{sec:suspension}
-Suspension is represented by four vertical linear spring-damper systems associated with each wheel of the car. Quantities relating to each of the systems will be distinguished by subscripts according to Table \ref{table:subscripts}, the $w$ subscript is used when referring generically to any one of them.
+Quantities relating to each of the four wheels or the correpsonding suspension systems will be distinguished by subscripts according to Table \ref{table:subscripts}, the $w$ subscript is used when referring generically to any one of them.
 
 \begin{table}[ht]
   \caption{Wheel and suspension systems subscripts} % title of Table
@@ -58,6 +86,10 @@ Suspension is represented by four vertical linear spring-damper systems associat
   \label{table:subscripts} % is used to refer this table in the text
 \end{table}
 
+\section{Suspension}
+\label{sec:suspension}
+Suspension is represented by four vertical linear spring-damper systems associated with each wheel of the car.
+
 The upper end of each suspension system is attached to an appropriate point $P_w$ statically defined with respect to the chassis, the lower end point is obtained by projecting $P_w$ onto the road plane.
 The spring length $h_w$ is given by the distance between $P_w$ and the road plane, so it is equal to the opposite of the inertial system $z$ coordinate of $P_w$.
 
@@ -68,7 +100,7 @@ The spring length $h_w$ is given by the distance between $P_w$ and the road plan
   \label{3dview}
 \end{figure}
 
-The correct weight transfer effects are obtained by assigning the corresponding wheel contact point $x$ and $y$ coordinates to each of the $P_w$ points, these are easily calculated from the front and rear track lengths ($t_F$ and $t_R$) and the distances of the front and rear axles from the CoG ($l_F$ and $l_R$).
+The correct weight transfer effects are obtained by assigning the corresponding wheel contact point $x$ and $y$ coordinates to each of the $P_w$ points. These are easily calculated from the front and rear track lengths ($t_F$ and $t_R$) and the distances of the front and rear axles from the CoG ($l_F$ and $l_R$).
 
 The $z$ co-ordinates of the $P_w$ points with respect to the chassis system are finally chosen in order to obtain realistic roll dynamics.
 
@@ -86,8 +118,8 @@ The roll center height, as defined by the SAE in J670, is determined by suspensi
 In the developed model, each roll center is approximated by the midpoint of the left and right $P_w$ points of the corresponding axle. Appendix \ref{chap:roll} justifies this approximation.
 
 The roll center heights ($q_F$ and $q_R$) are a common design specification in race cars.
-Their values can be obtained by means of multibody simulation, experimental tests or kinematic approximations.
-$q_F$ and $q_R$  are given with respect to ground in the resting condition even though they are relevant when considered in respect to the CoG height and tend to move with the chassis of the vehicle.
+Their values can be obtained by means of multibody simulation, experimental tests or kinematic approximations \cite{gillespie}.
+$q_F$ and $q_R$ are given with respect to ground in the resting condition even though they are relevant when considered in respect to the CoG height and tend to move with the chassis of the vehicle.
 When the model is in the resting condition the height of each of the $P_w$ points is made to match the corresponding roll center height by completing their definition as in table \ref{table:susppoints}.
 
 \begin{table}[ht]
@@ -106,7 +138,7 @@ When the model is in the resting condition the height of each of the $P_w$ point
   \label{table:susppoints} % is used to refer this table in the text
 \end{table}
 
-Appendix \ref{chap:roll} also shows that the linear spring rates for the model should be chosen as
+In appendix \ref{chap:roll} it is also shown that the linear spring rates for the model should be chosen as
 $$
 k_F = \frac{\phi}{F} = 2\frac{h_{CG}-q_F}{K_{\phi F} t_F^2}.
 $$
@@ -140,17 +172,37 @@ $$ U_{spring} = \frac{1}{2} k_F [(h_{FR} - h_{F0})^2 + (h_{FL} - h_{F0})^2] +  \
 The total potential energy function is
 $$ U = U_{spring} + U_{grav} $$
 
-The damping effect of the suspension is modelled by the Rayleigh dissipation function
+The damping effect of the shock absorbers is modelled by the Rayleigh dissipation function
 $$ D = \frac{1}{2} b_F (\dot h_{FR}^2 + \dot h_{FL}^2) + \frac{1}{2} b_R (\dot h_{RR}^2 + \dot h_{RL}^2) $$
-$b_F$ and $b_r$ are the damping ratios of the spring damper systems. \todo{how to get these parameters?}
+$b_F$ and $b_r$ are the effective damping coefficients for vertical movements.
 
 The translational kinetic energy of the car is given by
 $$ T_{trans} = \frac{1}{2} m (\dot x_{CG}^2 +\dot y_{CG}^2 +\dot z_{CG}^2 ) $$
 
+
+The angular velocity vector with respect to the inertial frame is obtained from the roll, pitch and yaw rates as
+$$
+\omega' = E\begin{bmatrix}
+\dot\psi \\
+\dot\theta \\
+\dot\phi
+\end{bmatrix}
+$$
+where $E$ is
+$$
+E=\begin{bmatrix}
+0 & -sin(\psi)      & cos(\theta)cos(\psi)\\
+0      & cos(\psi) &  cos(\theta)sin(\psi) \\
+1 & 0      & -sin(\theta)
+\end{bmatrix}.
+$$
+
+
 The rotational kinetic energy is obtained from the expression
 $$ T_{rot} = \frac{1}{2}\omega^T I \omega $$
 
-The angular velocity vector $\omega$ must be expressed with respect to the same axes as the inertia matrix, i.e. the chassis reference frame.
+The angular velocity vector $\omega$ must be expressed with respect to the same axes as the inertia matrix, i.e. the chassis reference frame. This is easily done by
+$$\omega = R^{-1}\omega'$$
 
 The total kinetic energy function is then
 $$ T = T_{rot} + T_{trans} $$
@@ -158,7 +210,7 @@ $$ T = T_{rot} + T_{trans} $$
 The steering angle input $\delta$ acts like a time varying parameter in the model, influencing the wheel system rotation matrices.
 The tyre horizontal force component inputs $F_wx$ $F_wy$ are to be expressed with respect to each of the wheel reference systems.
 
-To obtain the generalized forces vector $Q$. The external forces are rotated into inertial frame co-ordinates and applied to the $W_w$ points.
+To obtain the generalized forces vector $Q$ the external forces expressed in vector form in the wheel frames are rotated into inertial frame co-ordinates and applied to the $P_w$ points.
 
 \section{6DoF Dynamics equation set}
 \label{sec:6dofeq}
@@ -194,7 +246,7 @@ The outputs expressed as fuctions of the lagrangian coordinates are:
 \todo{districa matlab}
 The Lagrange Equations may be expressed in the form
 
-$$M(\theta,\phi)\ddot x = f(q, \dot q) + Q(\delta)u$$
+$$M(\theta,\phi)\ddot x = f(q, \dot q) + Q(q,\delta)u$$
 
 \begin{align*}
   M_{\mathrm{\psi},\mathrm{\psi}}&=\mathrm{I_{zz}}\,{\cos\left(\mathrm{\theta}\right)}^2\,{\cos\left(\mathrm{\phi}\right)}^2+\mathrm{I_{yy}}\,{\cos\left(\mathrm{\theta}\right)}^2\,{\sin\left(\mathrm{\phi}\right)}^2-2\,\mathrm{I_{xz}}\,\cos\left(\mathrm{\theta}\right)\,\cos\left(\mathrm{\phi}\right)\,\sin\left(\mathrm{\theta}\right)+\mathrm{I_{xx}}\,{\sin\left(\mathrm{\theta}\right)}^2 \\

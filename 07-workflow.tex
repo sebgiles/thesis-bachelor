@@ -1,5 +1,6 @@
 \chapter{Model implementation workflow}
 \label{chap:workflow}
+This chapter shows the process behind the implementation of the 12 DoF Model. The 6 Do f
 To make the developed model easy to handle as part of more complex projects it was implemented in the form of a simulink library.
 The library comprises two blocks, a tyre block and a Body block as in Figure \ref{blocks}.
 \begin{figure}[ht]
@@ -37,22 +38,17 @@ The internal block diagram for the 12 DoF Model is shown in figure \ref{12diag}.
   \caption{Simulink block diagram for the 12DoF model.}
   \label{12diag}
 \end{figure}
-The dynamics block evaluates the state space representation of the system starting from the value of the state and the inputs, yielding the state derivative $\dot x$ which is then integrated and closes it's feedback lock.
+The dynamics block employs the state space representation of the system to evaluate the state derivative $\dot x$ from the state and the inputs. $\dot x$ is then integrated completing it's feedback loop.
 The "tovector" block simply assembles the incoming signals into the input vector for the dynamic system. The "split" block disassembles the state vector $x$ into the lagragian coordinates and their derivatives.
 The "slip" block takes the vehicle coordinates as an input, calculates the contact point velocities and returns the slip angles and slip ratios.
-The compute wheel loads block evaluates the vertical wheel forces using the formulas in \ref{6dofout}.
+The compute wheel loads block evaluates the vertical wheel forces using the formulas in \ref{sec:6dofout}.
 The initial state for the integrator is taken from the block mask along with the vehicle parametrization.
-
-
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{images/bodymask.png}
   \caption{Simulink block mask for the 12DoF Model.}
 \end{figure}
-
-
-
 
 \subsection{Parameters and initial state}
 
