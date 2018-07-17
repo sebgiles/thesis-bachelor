@@ -213,36 +213,6 @@ To obtain the generalized forces vector $Q$ the external forces expressed in vec
 
 \section{6DoF Dynamics equation set}
 \label{sec:6dofeq}
-\todo{districare il groviglio che mi lascia Matlab}
-
-\section{Output functions}
-\label{sec:6dofout}
-The vertical wheel load outputs are calculated by the forces acting in the suspension systems, as a sum of the elastic and linear damping force.
-$$Z_{FR} = - k_F (h_{FR} - h_{F0}) - b_F \dot h_{FR} $$
-$$Z_{FL} = - k_F (h_{FL} - h_{F0}) - b_F \dot h_{FL} $$
-$$Z_{RR} = - k_R (h_{RR} - h_{R0}) - b_R \dot h_{RR} $$
-$$Z_{RL} = - k_R (h_{RL} - h_{R0}) - b_R \dot h_{RL} $$
-
-The contact point velocities output is given by the time derivatives of the $W_w$ points' co-ordinates in the inertial frame rotated into wheel system co-ordinates. The $W_w$ point coordinates are defined with respect to the undercarriage reference frame in table \ref{table:contactpoints}
-
-\begin{table}[ht]
-  \caption{Coordinates of the tyre contact points} % title of Table
-  \centering % used for centering table
-  \begin{tabular}{l l l l l} % left aligned columns (4 columns)
-    \hline\hline %inserts double horizontal lines
-    Undercarriage system co-ordinates & $W_{FR}$ & $W_{FL}$ & $W_{RR}$ & $W_{RL}$ \\ [0.5ex] % inserts table
-    %heading
-    \hline % inserts single horizontal line
-    $ x$ & $ l_f$ & $ l_f$ & $-l_r $ & $-l_r $\\ % inserting body of the table
-    $ y$ & $ \frac{t_f}{2} $ & $ -\frac{t_f}{2}$ & $ \frac{t_r}{2}$ & $ -\frac{t_r}{2}$\\ % inserting body of the table
-    $ z$ & $ 0 $& $ 0 $ & $ 0$ & $ 0$ \\ [1ex] % [1ex] adds vertical space
-    \hline %inserts single line
-  \end{tabular}
-  \label{table:contactpoints} % is used to refer this table in the text
-\end{table}
-
-The outputs expressed as fuctions of the lagrangian coordinates are:
-\todo{districa matlab}
 The Lagrange Equations may be expressed in the form
 
 $$M(\theta,\phi)\ddot x = f(q, \dot q) + Q(q,\delta)u$$
@@ -260,3 +230,29 @@ $$M(\theta,\phi)\ddot x = f(q, \dot q) + Q(q,\delta)u$$
 $$
 M(\phi,\theta)=\left(\begin{array}{cccccc} M_{\mathrm{\psi},\mathrm{\psi}} & M_{\mathrm{\psi},\mathrm{\theta}} & M_{\mathrm{\psi},\mathrm{\phi}} & 0 & 0 & 0\\ M_{\mathrm{\psi},\mathrm{\theta}} & M_{\mathrm{\theta},\mathrm{\theta}} & M_{\mathrm{\theta},\mathrm{\phi}} & 0 & 0 & 0\\ M_{\mathrm{\psi},\mathrm{\phi}} & M_{\mathrm{\theta},\mathrm{\phi}} & M_{\mathrm{\phi},\mathrm{\phi}} & 0 & 0 & 0\\ 0 & 0 & 0 & m & 0 & 0\\ 0 & 0 & 0 & 0 & m & 0\\ 0 & 0 & 0 & 0 & 0 & m \end{array}\right)
 $$
+
+\section{Output functions}
+\label{sec:6dofout}
+The vertical wheel load outputs are calculated by the forces acting in the suspension systems, as a sum of the elastic and linear damping force.
+$$Z_{FR} = - k_F (h_{FR} - h_{F0}) - b_F \dot h_{FR} $$
+$$Z_{FL} = - k_F (h_{FL} - h_{F0}) - b_F \dot h_{FL} $$
+$$Z_{RR} = - k_R (h_{RR} - h_{R0}) - b_R \dot h_{RR} $$
+$$Z_{RL} = - k_R (h_{RL} - h_{R0}) - b_R \dot h_{RL} $$
+
+The contact point velocities output is given by the time derivatives of the $W_w$ points' co-ordinates in the inertial frame rotated into wheel system co-ordinates. The $W_w$ point coordinates are defined with respect to the undercarriage reference frame in table \ref{table:contactpoints}.
+
+\begin{table}[ht]
+  \caption{Coordinates of the tyre contact points} % title of Table
+  \centering % used for centering table
+  \begin{tabular}{l l l l l} % left aligned columns (4 columns)
+    \hline\hline %inserts double horizontal lines
+    Undercarriage system co-ordinates & $W_{FR}$ & $W_{FL}$ & $W_{RR}$ & $W_{RL}$ \\ [0.5ex] % inserts table
+    %heading
+    \hline % inserts single horizontal line
+    $ x$ & $ l_f$ & $ l_f$ & $-l_r $ & $-l_r $\\ % inserting body of the table
+    $ y$ & $ \frac{t_f}{2} $ & $ -\frac{t_f}{2}$ & $ \frac{t_r}{2}$ & $ -\frac{t_r}{2}$\\ % inserting body of the table
+    $ z$ & $ 0 $& $ 0 $ & $ 0$ & $ 0$ \\ [1ex] % [1ex] adds vertical space
+    \hline %inserts single line
+  \end{tabular}
+  \label{table:contactpoints} % is used to refer this table in the text
+\end{table}
