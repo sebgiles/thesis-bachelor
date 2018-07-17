@@ -150,7 +150,7 @@ To make the model of the car sit in the resting position with zero pitch angle a
 $$ h_{F0} = q_F + \frac{mg}{2k_F}\frac{l_R}{l_R+l_F} $$
 $$ h_{R0} = q_r + \frac{mg}{2k_R}\frac{l_F}{l_R+l_F} $$
 
-\section{Lagrangian formulation of the problem}
+\section{Lagrangian formulation}
 \label{sec:6doflag}
 Equations of motion were obtained by solving the lagrangian formulation of the system with respect to the inertial reference frame.
 The chosen lagrangian coordinates are, in order, the yaw, pitch and roll angles and the coordinates of the chassis CoG
@@ -179,6 +179,14 @@ $b_F$ and $b_r$ are the effective damping coefficients for vertical movements.
 The translational kinetic energy of the car is given by
 $$ T_{trans} = \frac{1}{2} m (\dot x_{CG}^2 +\dot y_{CG}^2 +\dot z_{CG}^2 ) $$
 
+$E$ is the mapping between the Tait-Bryan angle derivatives and the angular velocity vector
+$$
+E=\begin{bmatrix}
+0 & -sin(\psi)      & cos(\theta)cos(\psi)\\
+0      & cos(\psi) &  cos(\theta)sin(\psi) \\
+1 & 0      & -sin(\theta)
+\end{bmatrix}.
+$$
 
 The angular velocity vector with respect to the inertial frame is obtained from the roll, pitch and yaw rates as
 $$
@@ -188,21 +196,12 @@ $$
 \dot\phi
 \end{bmatrix}
 $$
-where $E$ is
-$$
-E=\begin{bmatrix}
-0 & -sin(\psi)      & cos(\theta)cos(\psi)\\
-0      & cos(\psi) &  cos(\theta)sin(\psi) \\
-1 & 0      & -sin(\theta)
-\end{bmatrix}.
-$$
 
-
-The rotational kinetic energy is obtained from the expression
-$$ T_{rot} = \frac{1}{2}\omega^T I \omega $$
-
-The angular velocity vector $\omega$ must be expressed with respect to the same axes as the inertia matrix, i.e. the chassis reference frame. This is easily done by
+Computing the kinetic energy requires that the angular velocity vector $\omega$ must be expressed with respect to the same axes as the inertia matrix, i.e. the chassis reference frame. This is easily done by
 $$\omega = R^{-1}\omega'$$
+
+The rotational kinetic energy is
+$$ T_{rot} = \frac{1}{2}\omega^T I \omega $$
 
 The total kinetic energy function is then
 $$ T = T_{rot} + T_{trans} $$

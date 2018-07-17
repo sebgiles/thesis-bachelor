@@ -38,6 +38,7 @@
 \usepackage{tikz} % per i grafici
 \usepackage{tikz-3dplot}
 \newcommand\todo[1]{\textcolor{red}{[TODO:#1]}}
+\usepackage{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -48,24 +49,27 @@
     pdfstartview={FitH},
     colorlinks,
     linkcolor={black}, %COLORE DEI RIFERIMENTI AL TESTO
-    citecolor={blue}, %COLORE DEI RIFERIMENTI ALLE CITAZIONI
-    urlcolor={blue} %COLORI DEGLI URL
+    citecolor={black}, %COLORE DEI RIFERIMENTI ALLE CITAZIONI
+    urlcolor={black} %COLORI DEGLI URL
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % CONFIGURAZIONE LISTATI/CODICE - CANCELLARE SE NON NECESSARIO
 % PYTHON - BIANCO E NERO
+
 \lstset{%
 	captionpos=b,
 	language=Matlab,
-	basicstyle =\small\ttfamily,
+	basicstyle =\small\fontfamily{pcr},
 	keywordstyle=\color{black}\bfseries,
 	breaklines=true,
 	breakatwhitespace=true,
+	showstringspaces=false,
 	frame=lines,
 	numbers=left,
 	numberstyle=\footnotesize,
+	morekeywords={subs, simplify, genforces, solve, functionalDerivative, matlabFunction}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONFIGURAZIONE GRAFICI
@@ -237,10 +241,10 @@ Thanks to someone
 \mainmatter
 
 % INCLUSIONE FILE CAPITOLI - PERSONALIZZARE - TENERE COERENTE CON LISTA IN ALTO
-% ma la lista in alto l'ho esclusa ihihi che pirata che sono
+% ma la lista in alto l'ho esclusa
 \include{01-intro}
 \include{02-tyres}
-\include{03-stateoftheart}
+%\include{03-stateoftheart}
 \include{04-6dof}
 \include{05-12dof}
 %\include{06-matlab}
@@ -250,9 +254,8 @@ Thanks to someone
 
 \appendix
 % INCLUSIONE APPENDICI - - PERSONALIZZARE - TENERE COERENTE CON LISTA IN ALTO
-\include{appA-math}
-\include{appB-roll}
-\include{appB-6dofcode}
+\include{appA-roll}
+\include{appB-genforces}
 \include{appC-12dofcode}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
