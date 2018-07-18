@@ -6,7 +6,22 @@ The SAE definition of roll center is
 \textit{\say{The point in the transverse vertical plane through any pair of wheel centers at which lateral forces may be applied to the sprung mass without producing suspension roll}}
 
 This definition directly relates the $P_w$ points to the roll center height.
-Validity for chosen roll center approximation can be shown by modifying a generic equilibrium situation such as the one described in figure \todo{la stessa di prima} and applying a new side force $F'$ acting on the midpoint $M_F$ of $P_{FR}$ and $P_{FL}$, if the tyres are capable of generating the necessary friction forces ($F_1$ and $F_2$), the system will settle in a new equilibrium state.
+Validity for chosen roll center approximation can be shown by modifying a generic equilibrium situation such as the one described in figure \ref{roll} and applying a new side force $F'$ acting on the midpoint $M_F$ of $P_{FR}$ and $P_{FL}$, if the tyres are capable of generating the necessary friction forces ($F_1$ and $F_2$), the system will settle in a new equilibrium state.
+The new situation is shown in figures \ref{rollforces} and A.2.
+
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[height = 5cm]{images/rollsizes}
+  \label{rollsizes}
+  \caption{Front view of the front axle, dimensional parameters of the model.}
+
+  \centering
+  \includegraphics[height = 5cm]{images/rollforces}
+  \label{rollforces}
+  \caption{Front view of the front axle, forces acting on the vehicle.}
+
+\end{figure}
+
 The sum of vertical forces acting on the tyres does not change as it is equal to
 $$
 F_z := F_{z1}+F_{z2} = mg.
@@ -41,14 +56,14 @@ $$
 \mu_y k_F \frac{t_F^2}{2} \sin^2 \phi - k_F \frac{t_F^2}{2} \sin \phi \cos \phi - F(h_{CG}-q_F) \cos \phi = 0
 $$
 
-\todo{find source for roll angles in passenger cars being a few ° max} The equation may be linearized with respect to $\phi$.
+The roll angle in road vehicles rarely exceeds a few degrees so the equation may be linearized with respect to $\phi$.
 $$
 - k_F \frac{t_F^2}{2}  \phi  - F(h_{CG}-q_F) = 0
 $$
 
 Doing so makes the solution for $\phi$ independent of $\mu_y$, the only quantity influenced by $F'$. The height of point $M_F$ is then effectively the roll center height according to the SAE definition.
 
-The roll rate $K_\phi$ is defined as roll angle per unit of lateral force applied to the CG \todo{find source}, applying this definition to the linearized equation gives the expression to be used to derive spring rates for the 6DoF model in order to match the roll-rate of the car.
+The roll rate $K_\phi$ is defined as roll angle per unit of lateral force applied to the CG, applying this definition to the linearized equation gives the expression to be used to derive spring rates for the 6DoF model in order to match the roll-rate of the car.
 $$
 K_\phi = \frac{\phi}{F} = 2\frac{h_{CG}-q_F}{K_Ft_F^2}
 $$

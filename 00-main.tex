@@ -39,7 +39,8 @@
 \usepackage{tikz-3dplot}
 \newcommand\todo[1]{\textcolor{red}{[TODO:#1]}}
 \usepackage{fancyvrb}
-
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % CONFIGURAZIONE LINK E RIFERIMENTI
@@ -217,9 +218,11 @@ Thanks to someone
 % ABSTRACT - PERSONALIZZARE
 \include{00-sommario}
 
-%\sommario
-%Abstract, in English.
-
+\sommario
+The use of multiple motors to independently drive each wheel of a road vehicle allows for handling and safety improvements by means of electronic control systems.
+In this work a 6DoF mathematical model of the four wheeled car is developed to be used in control system design. It includes longitudinal and lateral load transfer dynamics. The model is then extended to include the dynamic effects of the wheels and the steering system.
+The model is derived using Lagrangian mechanics with the help of the MATLAB Symbolic Math Toolbox.
+This work also describes the method used for simulations and tests in the Simulink software environment.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % INDICI - ELIMINARE GLI INDICI NON NECESSARI

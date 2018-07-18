@@ -39,7 +39,8 @@ The internal block diagram for the 12 DoF Model is shown in figure \ref{12diag}.
     \label{12diag}
 \end{figure}
 The \textit{dynamics} block employs the state space representation of the system to evaluate the state derivative $\dot x$ from the state and the inputs. The state derivative, $\dot x$, is then integrated to close the physical feedback loop. The expressions used by the \textit{dynamics} block are loaded from a MATLAB function file created by the \textit{carmodel.m} script (Appendix \ref{sec:12dofcode}) discussed in section \ref{scriptdescription}.
-The \textit{tovector} block simply assembles the incoming signals into the input vector for the dynamic system. The \textit{split} block disassembles the state vector $x$ into the lagragian coordinates and their derivatives.
+The \textit{tovector} block simply assembles the incoming signals into the input vector for the dynamic system.
+The \textit{split} block disassembles the state vector $x$ into two vectors: the lagragian coordinates and their derivatives.
 The \textit{slip} block takes the vehicle coordinates as an input, calculates the contact point velocities and returns the slip angles and slip ratios.
 The \textit{computeWheelLoads} block evaluates the vertical wheel forces using the formulas in section \ref{sec:6dofout}.
 
@@ -116,7 +117,7 @@ The \textit{visualization} subsystem includes several \textit{scope} blocks to p
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.5]{images/2danimation.png}
-    \caption{Simulink real time interface.}
+    \caption{Real time animation of the vehicle model. The trajectories of the CoG and the rear axle midpoint aretraced in blue and pink respectively.}
 	\label{animfig}
 \end{figure}
 
@@ -136,7 +137,7 @@ A sinusoidal steering angle input was used to observe transients in the 6DoF veh
 
 \subsection{Manual steering and acceleration}
 Simulink offers the possiblity to slow down simulations to real-time speed and
-graphical user interface block to modify simulation parameters during execution. These two features in combination with the 2D animation shown in figure \ref{animfig} made it possible to manually drive the simulink model using the computer cursor, like a rudimentary videogame, whilst saving simulation data. The "driver" interface is shown in figure \ref{12mask}.
+graphical user interface block to modify simulation parameters during execution. These two features in combination with the 2D animation shown in figure \ref{animfig} made it possible to manually drive the simulink model using the computer cursor like in a videogame whilst logging simulation data. The "driver" interface is shown in figure \ref{12mask}.
 
 \begin{figure}[h]
     \centering
